@@ -37,20 +37,20 @@ public:
 
     SimpleVector() noexcept = default;
 
-    explicit SimpleVector(size_t size) {
+    explicit SimpleVector(size_t size) : size_(size), capacity_(size) {
         ArrayPtr<Type> tmp(size);
         content_.swap(tmp);
-        size_ = size; 
-        capacity_ = size;
+        //ArrayPtr<Type> content_(size);        // Don't work
     }
 
     SimpleVector(size_t size, const Type& value) {
         ArrayPtr<Type> tmp(size);
-        Type* It = tmp.begin();
-        for (size_t i = 0; i < size; ++i) {
-            *It = value;
-            ++It;
-        }
+        //Type* It = tmp.begin();
+        //for (size_t i = 0; i < size; ++i) {
+        //    *It = value;
+        //    ++It;
+        //}
+        std::fill(tmp.begin(), tmp.end(), value);
         content_.swap(tmp);
         size_ = size;
         capacity_ = size;
@@ -89,7 +89,8 @@ public:
     ~SimpleVector() = default;
     
     SimpleVector& operator=(const SimpleVector& rhs) {
-        if (&content_[0] == &rhs.content_[0])
+        //if (&content_[0] == &rhs.content_[0])
+        if (this == &rhs)
             return *this;
         if (capacity_ >= rhs.size_) {
             std::copy(rhs.cbegin(), rhs.cend(), &content_[0]);
@@ -115,7 +116,7 @@ public:
         ArrayPtr<Type> tmp(new_capacity);
         std::copy(begin(), end(), tmp.begin());
         tmp[size_] = item;
-        content_.swap(tmp);
+        content_.swap(tmp);     // here and everywhere - move?
 
         ++size_;
         capacity_ = new_capacity;
@@ -138,6 +139,9 @@ public:
     }
     
     Iterator Insert(ConstIterator pos, const Type& value) {
+        if (pos < begin() || pos > end())
+            throw std::out_of_range("Invalid iterator insert");
+
         if (capacity_ == 0) {
             // pos - ?? nullptr? first_?
             ArrayPtr<Type> tmp(1);
@@ -147,7 +151,6 @@ public:
             size_ = 1;
             return begin();
         }
-
         size_t dist = std::distance(cbegin(), pos);
         if (size_ < capacity_) {
             if (pos != cend())
@@ -156,7 +159,6 @@ public:
             ++size_;
             return begin() + dist;
         }
-
         ArrayPtr<Type> tmp(capacity_ * 2);
         std::copy(cbegin(), cbegin() + dist, tmp.begin());
         std::copy_backward(cbegin() + dist, cend(), &tmp[size_ + 1]);
@@ -169,7 +171,10 @@ public:
         return begin() + dist;
     }
 
-    Iterator Insert(ConstIterator pos, Type&& value)  {
+    Iterator Insert(ConstIterator pos, Type&& value) {
+        if (pos < begin() || pos > end())
+            throw std::out_of_range("Invalid iterator insert"); 
+        
         if (capacity_ == 0) {
             // pos - ?? nullptr? first_?
             ArrayPtr<Type> tmp(1);
@@ -200,12 +205,15 @@ public:
     }
     
     void PopBack() noexcept {
-        if (size_)
-            --size_;
+        assert(!IsEmpty());
+        --size_;
     }
     
     Iterator Erase(ConstIterator pos) {
-        size_t dist = std::distance(cbegin(), pos);
+        if (pos < begin() || pos > end())
+            throw std::out_of_range("Invalid iterator erase"); 
+
+        auto dist = std::distance(cbegin(), pos);
         ArrayPtr<Type> tmp(capacity_);
         std::move(begin(), begin() + dist, tmp.begin());
         std::move(begin() + dist + 1, end(), &tmp[dist]);
@@ -229,7 +237,7 @@ public:
     }
 
     bool IsEmpty() const noexcept {
-        return !(size_);
+        return size_ == 0;
     }
     
     Type& operator[](size_t index) noexcept {
@@ -243,14 +251,16 @@ public:
     }
     
     Type& At(size_t index) {
-        if (index >= size_)
-            throw std::out_of_range("");
+        if (index >= size_) {
+            throw std::out_of_range("Invalid index in At method");
+        }
         return content_[index];
     }
 
     const Type& At(size_t index) const {
-        if (index >= size_)
-            throw std::out_of_range("");
+        if (index >= size_) {
+            throw std::out_of_range("Invalid index in At method");
+        }
         return content_[index];
     }
     
@@ -303,27 +313,27 @@ public:
     }
         
     Iterator begin() noexcept {
-        if (capacity_ == 0)
-            return nullptr;
-        return &content_[0];
+        //if (capacity_ == 0)
+        //    return nullptr;
+        return content_.Get();
     }
 
     Iterator end() noexcept {
-        if (capacity_ == 0)
-            return nullptr;
-        return &content_[size_];
+        //if (capacity_ == 0)
+        //    return nullptr;
+        return content_.Get() + size_;
     }
 
     ConstIterator begin() const noexcept {
-        if (capacity_ == 0)
-            return nullptr;
-        return &content_[0];
+        //if (capacity_ == 0)
+        //    return nullptr;
+        return content_.Get();
     }
 
     ConstIterator end() const noexcept {
-        if (capacity_ == 0)
-            return nullptr;
-        return &content_[size_];
+        //if (capacity_ == 0)
+        //    return nullptr;
+        return content_.Get() + size_;
     }
 
     ConstIterator cbegin() const noexcept {
@@ -337,8 +347,9 @@ public:
 
 template <typename Type>
 inline bool operator==(const SimpleVector<Type>& lhs, const SimpleVector<Type>& rhs) {
-    if (lhs.GetSize() != rhs.GetSize())
+    if (lhs.GetSize() != rhs.GetSize()) {
         return false;
+    }
     return std::equal(lhs.begin(), lhs.end(), rhs.begin());
 }
 
