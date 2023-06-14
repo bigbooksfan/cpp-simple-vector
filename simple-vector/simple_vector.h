@@ -1,4 +1,7 @@
 #pragma once
+/*
+
+// old version
 
 #include <cassert>
 #include <initializer_list>
@@ -378,3 +381,4 @@ inline bool operator>=(const SimpleVector<Type>& lhs, const SimpleVector<Type>& 
     return !(lhs < rhs);
 }
 
+*/
