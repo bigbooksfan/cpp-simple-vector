@@ -1,3 +1,7 @@
+/*
+
+// old version
+
 #pragma once
 #include <cassert>
 #include <stdexcept>
@@ -6,12 +10,12 @@
 
 using namespace std;
 
-// У функции, объявленной со спецификатором inline, может быть несколько
-// идентичных определений в разных единицах трансляции.
-// Обычно inline помечают функции, чьё тело находится в заголовочном файле,
-// чтобы при подключении этого файла из разных единиц трансляции не возникало ошибок компоновки
+// Г“ ГґГіГ­ГЄГ¶ГЁГЁ, Г®ГЎГєГїГўГ«ГҐГ­Г­Г®Г© Г±Г® Г±ГЇГҐГ¶ГЁГґГЁГЄГ ГІГ®Г°Г®Г¬ inline, Г¬Г®Г¦ГҐГІ ГЎГ»ГІГј Г­ГҐГ±ГЄГ®Г«ГјГЄГ®
+// ГЁГ¤ГҐГ­ГІГЁГ·Г­Г»Гµ Г®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГ© Гў Г°Г Г§Г­Г»Гµ ГҐГ¤ГЁГ­ГЁГ¶Г Гµ ГІГ°Г Г­Г±Г«ГїГ¶ГЁГЁ.
+// ГЋГЎГ»Г·Г­Г® inline ГЇГ®Г¬ГҐГ·Г ГѕГІ ГґГіГ­ГЄГ¶ГЁГЁ, Г·ГјВё ГІГҐГ«Г® Г­Г ГµГ®Г¤ГЁГІГ±Гї Гў Г§Г ГЈГ®Г«Г®ГўГ®Г·Г­Г®Г¬ ГґГ Г©Г«ГҐ,
+// Г·ГІГ®ГЎГ» ГЇГ°ГЁ ГЇГ®Г¤ГЄГ«ГѕГ·ГҐГ­ГЁГЁ ГЅГІГ®ГЈГ® ГґГ Г©Г«Г  ГЁГ§ Г°Г Г§Г­Г»Гµ ГҐГ¤ГЁГ­ГЁГ¶ ГІГ°Г Г­Г±Г«ГїГ¶ГЁГЁ Г­ГҐ ГўГ®Г§Г­ГЁГЄГ Г«Г® Г®ГёГЁГЎГ®ГЄ ГЄГ®Г¬ГЇГ®Г­Г®ГўГЄГЁ
 inline void Test1() {
-    // Инициализация конструктором по умолчанию
+    // Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г°Г®Г¬ ГЇГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ
     {
         SimpleVector<int> v;
         assert(v.GetSize() == 0u);
@@ -19,7 +23,7 @@ inline void Test1() {
         assert(v.GetCapacity() == 0u);
     }
     
-    // Инициализация вектора указанного размера
+    // Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї ГўГҐГЄГІГ®Г°Г  ГіГЄГ Г§Г Г­Г­Г®ГЈГ® Г°Г Г§Г¬ГҐГ°Г 
     {
         SimpleVector<int> v(5);
         assert(v.GetSize() == 5u);
@@ -30,7 +34,7 @@ inline void Test1() {
         }
     }
     
-    // Инициализация вектора, заполненного заданным значением
+    // Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї ГўГҐГЄГІГ®Г°Г , Г§Г ГЇГ®Г«Г­ГҐГ­Г­Г®ГЈГ® Г§Г Г¤Г Г­Г­Г»Г¬ Г§Г­Г Г·ГҐГ­ГЁГҐГ¬
     {
         SimpleVector<int> v(3, 42);
         assert(v.GetSize() == 3);
@@ -40,7 +44,7 @@ inline void Test1() {
         }
     }
     
-    // Инициализация вектора при помощи initializer_list
+    // Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї ГўГҐГЄГІГ®Г°Г  ГЇГ°ГЁ ГЇГ®Г¬Г®Г№ГЁ initializer_list
     {
         SimpleVector<int> v{ 1, 2, 3 };
         assert(v.GetSize() == 3);
@@ -48,22 +52,22 @@ inline void Test1() {
         assert(v[2] == 3);
     }
     
-    // Доступ к элементам при помощи At
+    // Г„Г®Г±ГІГіГЇ ГЄ ГЅГ«ГҐГ¬ГҐГ­ГІГ Г¬ ГЇГ°ГЁ ГЇГ®Г¬Г®Г№ГЁ At
     {
         SimpleVector<int> v(3);
         assert(&v.At(2) == &v[2]);
         try {
             v.At(3);
-            assert(false);  // Ожидается выбрасывание исключения
+            assert(false);  // ГЋГ¦ГЁГ¤Г ГҐГІГ±Гї ГўГ»ГЎГ°Г Г±Г»ГўГ Г­ГЁГҐ ГЁГ±ГЄГ«ГѕГ·ГҐГ­ГЁГї
         }
         catch (const std::out_of_range&) {
         }
         catch (...) {
-            assert(false);  // Не ожидается исключение, отличное от out_of_range
+            assert(false);  // ГЌГҐ Г®Г¦ГЁГ¤Г ГҐГІГ±Гї ГЁГ±ГЄГ«ГѕГ·ГҐГ­ГЁГҐ, Г®ГІГ«ГЁГ·Г­Г®ГҐ Г®ГІ out_of_range
         }
     }
     
-    // Очистка вектора
+    // ГЋГ·ГЁГ±ГІГЄГ  ГўГҐГЄГІГ®Г°Г 
     {
         SimpleVector<int> v(10);
         const size_t old_capacity = v.GetCapacity();
@@ -72,7 +76,7 @@ inline void Test1() {
         assert(v.GetCapacity() == old_capacity);
     }
     
-    // Изменение размера
+    // Г€Г§Г¬ГҐГ­ГҐГ­ГЁГҐ Г°Г Г§Г¬ГҐГ°Г 
     {
         SimpleVector<int> v(3);
         v[2] = 17;
@@ -103,16 +107,16 @@ inline void Test1() {
         assert(v[3] == 0);
     }
     
-    // Итерирование по SimpleVector
+    // Г€ГІГҐГ°ГЁГ°Г®ГўГ Г­ГЁГҐ ГЇГ® SimpleVector
     {
-        // Пустой вектор
+        // ГЏГіГ±ГІГ®Г© ГўГҐГЄГІГ®Г°
         {
             SimpleVector<int> v;
             assert(v.begin() == nullptr);
             assert(v.end() == nullptr);
         }
 
-        // Непустой вектор
+        // ГЌГҐГЇГіГ±ГІГ®Г© ГўГҐГЄГІГ®Г°
         {
             SimpleVector<int> v(10, 42);
             assert(v.begin());
@@ -133,7 +137,7 @@ inline void Test2() {
         assert(v[1] == 42);
     }
 
-    // Если хватает места, PushBack не увеличивает Capacity
+    // Г…Г±Г«ГЁ ГµГўГ ГІГ ГҐГІ Г¬ГҐГ±ГІГ , PushBack Г­ГҐ ГіГўГҐГ«ГЁГ·ГЁГўГ ГҐГІ Capacity
     {
         SimpleVector<int> v(2);
         v.Resize(1);
@@ -154,7 +158,7 @@ inline void Test2() {
         assert((v == SimpleVector<int>{0, 1, 2}));
     }
     
-    // Конструктор копирования
+    // ГЉГ®Г­Г±ГІГ°ГіГЄГІГ®Г° ГЄГ®ГЇГЁГ°Г®ГўГ Г­ГЁГї
     {
         SimpleVector<int> numbers{ 1, 2 };
         auto numbers_copy(numbers);
@@ -166,7 +170,7 @@ inline void Test2() {
         }
     }
     
-    // Сравнение
+    // Г‘Г°Г ГўГ­ГҐГ­ГЁГҐ
     {
         assert((SimpleVector{ 1, 2, 3 } == SimpleVector{ 1, 2, 3 }));
         assert((SimpleVector{ 1, 2, 3 } != SimpleVector{ 1, 2, 2 }));
@@ -180,7 +184,7 @@ inline void Test2() {
         assert((SimpleVector{ 1, 2, 3 } <= SimpleVector{ 1, 2, 4 }));
     }
     
-    // Обмен значений векторов
+    // ГЋГЎГ¬ГҐГ­ Г§Г­Г Г·ГҐГ­ГЁГ© ГўГҐГЄГІГ®Г°Г®Гў
     {
         SimpleVector<int> v1{ 42, 666 };
         SimpleVector<int> v2;
@@ -206,7 +210,7 @@ inline void Test2() {
         assert(v2.GetCapacity() == capacity1);
     }
     
-    // Присваивание
+    // ГЏГ°ГЁГ±ГўГ ГЁГўГ Г­ГЁГҐ
     {
         SimpleVector<int> src_vector{ 1, 2, 3, 4 };
         SimpleVector<int> dst_vector{ 1, 2, 3, 4, 5, 6 };
@@ -214,14 +218,14 @@ inline void Test2() {
         assert(dst_vector == src_vector);
     }
     
-    // Вставка элементов
+    // Г‚Г±ГІГ ГўГЄГ  ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў
     {
         SimpleVector<int> v{ 1, 2, 3, 4 };
         v.Insert(v.begin() + 2, 42);
         assert((v == SimpleVector<int>{1, 2, 42, 3, 4}));
     }
     
-    // Удаление элементов
+    // Г“Г¤Г Г«ГҐГ­ГЁГҐ ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў
     {
         SimpleVector<int> v{ 1, 2, 3, 4 };
         v.Erase(v.cbegin() + 2);
@@ -247,26 +251,26 @@ void TestReserveConstructor() {
 void TestReserveMethod() {
     cout << "TestReserveMethod"s << endl;
     SimpleVector<int> v;
-    // зарезервируем 5 мест в векторе
+    // Г§Г Г°ГҐГ§ГҐГ°ГўГЁГ°ГіГҐГ¬ 5 Г¬ГҐГ±ГІ Гў ГўГҐГЄГІГ®Г°ГҐ
     v.Reserve(5);
     assert(v.GetCapacity() == 5);
     assert(v.IsEmpty());
 
-    // попытаемся уменьшить capacity до 1
+    // ГЇГ®ГЇГ»ГІГ ГҐГ¬Г±Гї ГіГ¬ГҐГ­ГјГёГЁГІГј capacity Г¤Г® 1
     v.Reserve(1);
-    // capacity должно остаться прежним
+    // capacity Г¤Г®Г«Г¦Г­Г® Г®Г±ГІГ ГІГјГ±Гї ГЇГ°ГҐГ¦Г­ГЁГ¬
     assert(v.GetCapacity() == 5);
-    // поместим 10 элементов в вектор
+    // ГЇГ®Г¬ГҐГ±ГІГЁГ¬ 10 ГЅГ«ГҐГ¬ГҐГ­ГІГ®Гў Гў ГўГҐГЄГІГ®Г°
     for (int i = 0; i < 10; ++i) {
         v.PushBack(i);
     }
     assert(v.GetSize() == 10);
-    // увеличим capacity до 100
+    // ГіГўГҐГ«ГЁГ·ГЁГ¬ capacity Г¤Г® 100
     v.Reserve(100);
-    // проверим, что размер не поменялся
+    // ГЇГ°Г®ГўГҐГ°ГЁГ¬, Г·ГІГ® Г°Г Г§Г¬ГҐГ° Г­ГҐ ГЇГ®Г¬ГҐГ­ГїГ«Г±Гї
     assert(v.GetSize() == 10);
     assert(v.GetCapacity() == 100);
-    // проверим, что элементы на месте
+    // ГЇГ°Г®ГўГҐГ°ГЁГ¬, Г·ГІГ® ГЅГ«ГҐГ¬ГҐГ­ГІГ» Г­Г  Г¬ГҐГ±ГІГҐ
     for (int i = 0; i < 10; ++i) {
         assert(v[i] == i);
     }
@@ -413,15 +417,15 @@ void TestNoncopiableInsert() {
         v.PushBack(X(i));
     }
 
-    // в начало
+    // Гў Г­Г Г·Г Г«Г®
     v.Insert(v.begin(), X(size + 1));
     assert(v.GetSize() == size + 1);
     assert(v.begin()->GetX() == size + 1);
-    // в конец
+    // Гў ГЄГ®Г­ГҐГ¶
     v.Insert(v.end(), X(size + 2));
     assert(v.GetSize() == size + 2);
     assert((v.end() - 1)->GetX() == size + 2);
-    // в середину
+    // Гў Г±ГҐГ°ГҐГ¤ГЁГ­Гі
     v.Insert(v.begin() + 3, X(size + 3));
     assert(v.GetSize() == size + 3);
     assert((v.begin() + 3)->GetX() == size + 3);
@@ -440,3 +444,4 @@ void TestNoncopiableErase() {
     assert(it->GetX() == 1);
     cout << "Done!" << endl << endl;
 }
+*/
